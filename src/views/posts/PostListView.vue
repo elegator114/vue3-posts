@@ -40,7 +40,7 @@
 					</a>
 				</li>
 				<li
-					v-for="page in pageCount"
+					v-for="page in pageCount"	 // 전체 숫자를 받아온다
 					:key="page"
 					class="page-item"
 					:class="{ active: params._page === page }"
