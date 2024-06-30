@@ -18,6 +18,7 @@
       </div>
     </form>
     <hr class="my-4" />
+
     <div class="row g-3">
       <div v-for="post in posts" :key="post.id" class="col-4">
         <PostItem
@@ -90,7 +91,7 @@ const params = ref({
   _order: "desc",
   _page: 1,
   _limit: 3,
-  title_like: ""
+  title_like: "",
 });
 // pagination
 const totalCount = ref(0);
@@ -113,8 +114,8 @@ const goPage = (id) => {
   router.push({
     name: "PostDetail",
     params: {
-      id
-    }
+      id,
+    },
   });
 };
 </script>
