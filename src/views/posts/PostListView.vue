@@ -9,6 +9,7 @@
           <input v-model="params.title_like" type="text" class="form-control" />
         </div>
         <div class="col-3">
+          <!-- params.limit의 값을 바꾸어 준다 -->
           <select v-model="params._limit" class="form-select">
             <option value="3">3개씩 보기</option>
             <option value="6">6개씩 보기</option>
@@ -18,7 +19,7 @@
       </div>
     </form>
     <hr class="my-4" />
-
+    <!-- 여기서부터 카드를 나열한다 -->
     <div class="row g-3">
       <div v-for="post in posts" :key="post.id" class="col-4">
         <PostItem
@@ -29,8 +30,11 @@
         ></PostItem>
       </div>
     </div>
+    <!-- 여기서부터 pagination -->
     <nav class="mt-5" aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
+        <!--  -->
+        <!-- 맨 왼쪽의 화살표를 구성한다 -->
         <li class="page-item" :class="{ disabled: !(params._page > 1) }">
           <a
             class="page-link"
@@ -41,8 +45,9 @@
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-
-        <!-- 전체 숫자를 받아온다 pageCount -->
+        <!--  -->
+        <!-- 전체 숫자를 헤더에서 받아온다 pageCount -->
+        <!-- pageCount 숫자만큼 페이지를 표현한다 -->
         <li
           v-for="page in pageCount"
           :key="page"
@@ -53,6 +58,8 @@
             page
           }}</a>
         </li>
+        <!--  -->
+        <!-- 맨 오른쪽의 화살표를 구성한다 -->
         <li
           class="page-item"
           :class="{ disabled: !(params._page < pageCount) }"
@@ -66,12 +73,15 @@
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
+        <!--  -->
       </ul>
     </nav>
     <hr class="my-5" />
+    <!-- 앱카드 한 장  -->
     <AppCard>
       <PostDetailView :id="2"></PostDetailView>
     </AppCard>
+    <!--  -->
   </div>
 </template>
 
@@ -86,6 +96,9 @@ import { computed } from "@vue/reactivity";
 
 const router = useRouter();
 const posts = ref([]);
+//
+// params의 조건에 따라 getPost로 불러온다. json-server의 기능
+// title_like는 조건검색을 title에서 해준다는 의미이다
 const params = ref({
   _sort: "createdAt",
   _order: "desc",
@@ -95,20 +108,24 @@ const params = ref({
 });
 // pagination
 const totalCount = ref(0);
+// 전체 갯수 / limit   = 총 페이지 수
 const pageCount = computed(() =>
   Math.ceil(totalCount.value / params.value._limit)
 );
 const fetchPosts = async () => {
   try {
+    // params의 조건에 따라 getPost로 불러온다. json-server의 기능, https://github.com/typicode/json-server#readme 이 페이지의 Sort 부분 참조
     const { data, headers } = await getPosts(params.value);
     posts.value = data;
+    // 헤더에서 전체 갯수를 불러온다
     totalCount.value = headers["x-total-count"];
   } catch (error) {
     console.error(error);
   }
 };
+// 반응형 변수에 변화가 생기면 바로 다시 실행, watchEffect는 vue 내장함수
 watchEffect(fetchPosts);
-// fetchPosts();
+
 const goPage = (id) => {
   // router.push(`/posts/${id}`);
   router.push({
