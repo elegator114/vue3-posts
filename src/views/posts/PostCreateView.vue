@@ -12,6 +12,7 @@
 					목록
 				</button>
 				<button class="btn btn-primary">저장</button>
+				<button class="btn btn-primary">저장</button>
 			</template>
 		</PostForm>
 	</div>
