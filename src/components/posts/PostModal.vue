@@ -31,6 +31,7 @@ const emit = defineEmits(['update:modelValue']);
 
 const show = computed({
 	get() {
+		// 아래것 불러오기 
 		return props.modelValue;
 	},
 	set(value) {
